@@ -67,7 +67,7 @@ version_info() {
     echo "AWS CLI: $(aws --version)"
     echo "Docker: $(docker --version)"
     echo "Kubectl: $(kubectl version --client --short)"
-    echo "Kubectl Cluster Info:" $(kubectl cluster-info)
+    echo "Kubectl Cluster Info: $(kubectl cluster-info)"
     echo "Terraform: $(terraform version | head -n 1)"
     echo "Helm: $(helm version --short)"
 }
