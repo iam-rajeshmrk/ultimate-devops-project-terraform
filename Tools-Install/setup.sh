@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 echo "=== 1. Updating base system and prerequisites ==="
 sudo apt-get update -y
@@ -45,8 +44,11 @@ sudo apt-get install -y kubectl
 
 
 echo "=== 5. Installing Terraform ==="
-wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor --yes -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") main" | sudo tee /etc/apt/sources.list.d/hashicorp.list > /dev/null
+wget -O- https://apt.releases.hashicorp.com/gpg | \
+gpg --dearmor | \
+sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+sudo tee /etc/apt/sources.list.d/hashicorp.list
 sudo apt-get update -y
 sudo apt-get install -y terraform
 
@@ -64,12 +66,24 @@ echo "=========================================="
 
 version_info() {
     echo "=== Installed Versions ==="
-    echo "AWS CLI: $(aws --version)"
-    echo "Docker: $(docker --version)"
-    echo "Kubectl: $(kubectl version --client --short)"
-    echo "Kubectl Cluster Info: $(kubectl cluster-info)"
-    echo "Terraform: $(terraform version | head -n 1)"
-    echo "Helm: $(helm version --short)"
+
+    echo "AWS CLI:"
+    aws --version 2>&1 || echo "AWS CLI not installed"
+
+    echo "Docker:"
+    docker --version 2>&1 || echo "Docker not installed"
+
+    echo "Kubectl:"
+    kubectl version --client 2>&1 || echo "Kubectl not installed"
+
+    echo "Kubectl Cluster Info:"
+    kubectl cluster-info 2>&1 || echo "Kubernetes cluster not configured/reachable"
+
+    echo "Terraform:"
+    terraform version 2>&1 | head -n 1 || echo "Terraform not installed"
+
+    echo "Helm:"
+    helm version --short 2>&1 || echo "Helm not installed"
 }
 
-version_info() #calling the function to display installed versions
+version_info  #callinig the function to display installed versions
