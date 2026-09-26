@@ -12,22 +12,17 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "s3" {
+#configure terraform backend
+terraform {
+  backend "s3" {
   bucket = "terraform-eks-ultimate-state-s3-bucket"
-
- lifecycle {
-    prevent_destroy = false
-  }
-
-}
-
-resource "aws_dynamodb_table" "basic-dynamodb-table" {
-  name           = "terraform-eks-state-locks"
-  billing_mode   = "PAY_PER_REQUEST"
-  hash_key       = "LockID"
-
-  attribute {
-    name = "LockID" 
-    type = "S"
+  key  = "otel/terraform.tfstate"
+  region = "us-east-1"
+  encrypt = true
+  use_lockfile = true
   }
 }
+  
+
+
+
