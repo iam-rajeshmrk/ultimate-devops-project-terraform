@@ -102,7 +102,7 @@ Official documentation: [Install AWS CLI](https://docs.aws.amazon.com/cli/latest
 ## 🧭 Initialize Remote Backend (S3 + DynamoDB)
 1) Clone the repository containing your Terraform code and go to that directory:  
    ```
-   git clone https://github.com/I-am-nk/ultimate-devops-project-terraform.git
+   git clone https://github.com/iam-rajeshmrk/ultimate-devops-project-terraform.git
    ```
 
 2) Change directory to the backend folder (where backend config is stored).
